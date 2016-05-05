@@ -58,7 +58,10 @@ header p {
     height: 12px;
     margin-right: 1px;
     margin-bottom: 1px;
-    background-color: #55EE99;
+    background: #55EE99;
+    background: -moz-linear-gradient(#33FF44, #55EE99 50%);
+    background: -o-linear-gradient(#33FF44, #55EE99 50%);
+    background: -webkit-linear-gradient(#33FF44, #55EE99 50%);
 }
 
 #grid {
@@ -69,13 +72,22 @@ header p {
 }
 
 .snakeHead{
-	background-color: #EE5555;
+  background: #FF0000;
+	background: -moz-linear-gradient(#FF0000, #333333 60%);
+  background: -o-linear-gradient(#FF0000, #333333 60%);
+  background: -webkit-linear-gradient(#FF0000, #333333 60%);
 }
 
 .snakeBody {
-	background-color: #5599EE;
+  background: #444444;
+	background: -moz-linear-gradient(#444444 20%, #C2D1CE 60%, #444444 20%);
+  background: -o-linear-gradient(#444444 20%, #C2D1CE 60%, #444444 20%);
+  background: -webkit-linear-gradient(#444444 20%, #C2D1CE 60%, #444444 20%);
 }
 
 .food {
-	background-color: #FF00EE;
+  background: #FF00EE;
+	background: -moz-linear-gradient(#66FF88, #FF00EE 50%);
+  background: -o-linear-gradient(#66FF88, #FF00EE 50%);
+  background: -webkit-linear-gradient(#66FF88, #FF00EE 50%);
 }

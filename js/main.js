@@ -43,7 +43,7 @@ function drawFood() {
   $("#grid").find("#" + foodPos).addClass("food");
 }
 
-function moveSnake(key) {
+function moveSnake() {
   $(document).on("keydown", function(event) {
     switch (event.which) {
       case 37:
@@ -67,7 +67,7 @@ function moveSnake(key) {
 
     updateSnake(drop);
     // setTimeout(function() {
-    //   moveSnake(key);
+    //   moveSnake();
     // }, 500);
   })
 }
@@ -94,6 +94,8 @@ function getNextPos(direction) {
 
   if (nextPos === foodPos) {
     growSnake();
+  } else if (snakePos.includes(nextPos)) {
+    gameOver();
   }
 
   return nextPos;
@@ -109,8 +111,8 @@ function updateSnake(drop) {
     $("#grid").find("#" + bodyPart).addClass("snakeBody");
   })
 
-  // Add the snakeHead class to the last array item
-  $("#grid").find("#" + snakePos[snakePos.length-1]).addClass("snakeHead");
+  // Remove snakeBody class and add snakeHead class to the last array item
+  $("#grid").find("#" + snakePos[snakePos.length - 1]).removeClass("snakeBody").addClass("snakeHead");
 }
 
 // Increase snake size by 1
@@ -120,10 +122,15 @@ function growSnake() {
   drawFood();
 }
 
+function gameOver() {
+  alert("You dead");
+  document.location.reload();
+}
+
 function play() {
   drawSnakeStart();
   drawFood();
-  moveSnake(DOWN);
+  moveSnake();
 }
 
 $(document).ready(function() {
