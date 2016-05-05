@@ -6,16 +6,13 @@ UP = 38,
 RIGHT = 39,
 DOWN = 40;
 
-var snakePos = [];
-
-var grid = {
-
-}
+var snakePos = [],
+    foodPos;
 
 // Create a grid using the given x and y values
 function createGrid(x, y) {
-  var count = 0;
-  var $boxDiv = $("<div></div>");
+  var count = 0,
+      $boxDiv = $("<div></div>");
 
   for (var i = 0; i < x; i++) {
     for (var j = 0; j < y; j++) {
@@ -35,23 +32,9 @@ function drawSnakeStart() {
   snakePos.push(gridCenter);
 }
 
-
-function updateSnake(drop) {
-  // Remove snake classes from dropped box
-  $("#grid").find("#" + drop).removeClass("snakeHead").removeClass("snakeBody");
-
-  // Add the snakeBody class to each array item except for the head
-  snakePos.forEach(function(bodyPart) {
-    $("#grid").find("#" + bodyPart).addClass("snakeBody");
-  })
-
-  // Add the snakeHead class to the last array item
-  $("#grid").find("#" + snakePos[snakePos.length-1]).addClass("snakeHead");
-}
-
 // Generate a random box number and place food in it
 function drawFood() {
-  var foodPos = Math.floor(Math.random() * (ROWS * COLS)) + 1;
+  foodPos = Math.floor(Math.random() * (ROWS * COLS)) + 1;
 
   // If box id = snake id generate new number
   while (snakePos.includes(foodPos)) {
@@ -59,7 +42,6 @@ function drawFood() {
   }
   $("#grid").find("#" + foodPos).addClass("food");
 }
-
 
 function moveSnake(key) {
   $(document).on("keydown", function(event) {
@@ -110,7 +92,32 @@ function getNextPos(direction) {
       break;
   }
 
+  if (nextPos === foodPos) {
+    growSnake();
+  }
+
   return nextPos;
+}
+
+// Update snake's position in grid
+function updateSnake(drop) {
+  // Remove snake classes from dropped box
+  $("#grid").find("#" + drop).removeClass("snakeHead").removeClass("snakeBody");
+
+  // Add the snakeBody class to each array item except for the head
+  snakePos.forEach(function(bodyPart) {
+    $("#grid").find("#" + bodyPart).addClass("snakeBody");
+  })
+
+  // Add the snakeHead class to the last array item
+  $("#grid").find("#" + snakePos[snakePos.length-1]).addClass("snakeHead");
+}
+
+// Increase snake size by 1
+function growSnake() {
+  $("#grid").find("#" + foodPos).removeClass("food").addClass("snakeHead");
+  snakePos.push(foodPos);
+  drawFood();
 }
 
 function play() {
