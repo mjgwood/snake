@@ -45,6 +45,8 @@ function drawFood() {
 
 function moveSnake() {
   $(document).on("keydown", function(event) {
+    var key = 40;
+
     switch (event.which) {
       case 37:
         key = 'left';
@@ -61,11 +63,14 @@ function moveSnake() {
     }
 
     var nextPos = getNextPos(key);
+    if (nextPos) {
+      snakePos.push(nextPos);
 
-    snakePos.push(nextPos);
-    var drop = snakePos.shift();
+      var drop = snakePos.shift();
 
-    updateSnake(drop);
+      updateSnake(drop);
+    }
+
     // setTimeout(function() {
     //   moveSnake();
     // }, 500);
@@ -92,13 +97,15 @@ function getNextPos(direction) {
       break;
   }
 
-  if (nextPos === foodPos) {
-    growSnake();
-  } else if (snakePos.includes(nextPos)) {
-    gameOver();
-  }
+  if ( snakePos.length === 1 || nextPos !== snakePos[snakePos.length - 2]) {
+    if (nextPos === foodPos) {
+      growSnake();
+    } else if (snakePos.includes(nextPos)) {
+        gameOver();
+    }
 
-  return nextPos;
+    return nextPos;
+  }
 }
 
 // Update snake's position in grid
