@@ -7,7 +7,8 @@ RIGHT = 39,
 DOWN = 40;
 
 var snakePos = [],
-    foodPos;
+    foodPos,
+    automate;
 
 // Create a grid using the given x and y values
 function createGrid(x, y) {
@@ -43,56 +44,63 @@ function drawFood() {
   $("#grid").find("#" + foodPos).addClass("food");
 }
 
-function moveSnake() {
-  $(document).on("keydown", function(event) {
-    var key = 40;
+function moveSnake(keyNum) {
+  var key = keyNum;
 
-    switch (event.which) {
-      case 37:
-        key = 'left';
-        break;
-      case 38:
-        key = 'up';
-        break;
-      case 39:
-        key = 'right';
-        break;
-      case 40:
-        key = 'down';
-        break;
+  switch (key) {
+    case 37:
+      direction = "left";
+      break;
+    case 38:
+      direction = "up";
+      break;
+    case 39:
+      direction = "right";
+      break;
+    case 40:
+      direction = "down";
+      break;
     }
 
-    var nextPos = getNextPos(key);
-    if (nextPos) {
-      snakePos.push(nextPos);
+  var nextPos = getNextPos(direction);
 
-      var drop = snakePos.shift();
+  if (nextPos) {
+    snakePos.push(nextPos);
 
-      updateSnake(drop);
-    }
+    var drop = snakePos.shift();
 
-    // setTimeout(function() {
-    //   moveSnake();
-    // }, 500);
-  })
+    updateSnake(drop);
+  }
+
+  automateSnake();
+}
+
+function automateSnake() {
+  automate = setTimeout(function() {
+    moveSnake();
+  }, 200);
+}
+
+function clearAutomation() {
+  clearTimeout(automate);
 }
 
 // Get the nextPos for the snake to move to
-function getNextPos(direction) {
+function getNextPos(dir) {
   var headPos = snakePos[snakePos.length - 1],
       nextPos;
 
-  switch (direction) {
-    case 'left':
+  switch (dir) {
+    case "left":
       nextPos = headPos - 1;
       break;
-    case 'up':
+    case "up":
       nextPos = headPos - COLS;
       break;
-    case 'right':
+    case "right":
       nextPos = headPos + 1;
       break;
-    case 'down':
+    case "down":
       nextPos = headPos + COLS;
       break;
   }
@@ -137,10 +145,16 @@ function gameOver() {
 function play() {
   drawSnakeStart();
   drawFood();
-  moveSnake();
+  moveSnake(DOWN);
 }
 
 $(document).ready(function() {
   createGrid(ROWS, COLS);
   play();
+
+  $(document).on("keydown", function(event) {
+    var keyNum = event.which;
+    clearAutomation();
+    moveSnake(keyNum);
+  })
 });
