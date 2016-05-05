@@ -151,7 +151,7 @@ function growSnake() {
 function automateSnake() {
   automate = setTimeout(function() {
     moveSnake();
-  }, 200);
+  }, 100);
 }
 
 // Clear snake timeout
