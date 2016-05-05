@@ -1,10 +1,10 @@
 // Constants
 ROWS = 40,
 COLS = 40,
+LEFT = 37,
 UP = 38,
 RIGHT = 39,
-DOWN = 40,
-LEFT = 37;
+DOWN = 40;
 
 var snakePos = [];
 
@@ -28,11 +28,25 @@ function createGrid(x, y) {
 }
 
 // Create the snake head and place it in the grid's center
-function drawSnake() {
+function drawSnakeStart() {
   var gridCenter = Math.floor(((ROWS * COLS) / 2) - COLS / 2 );
 
   $("#grid").find("#" + gridCenter).addClass("snakeHead");
   snakePos.push(gridCenter);
+}
+
+
+function updateSnake(drop) {
+  // Remove snake classes from dropped box
+  $("#grid").find("#" + drop).removeClass("snakeHead").removeClass("snakeBody");
+
+  // Add the snakeBody class to each array item except for the head
+  snakePos.forEach(function(bodyPart) {
+    $("#grid").find("#" + bodyPart).addClass("snakeBody");
+  })
+
+  // Add the snakeHead class to the last array item
+  $("#grid").find("#" + snakePos[snakePos.length-1]).addClass("snakeHead");
 }
 
 // Generate a random box number and place food in it
@@ -46,11 +60,45 @@ function drawFood() {
   $("#grid").find("#" + foodPos).addClass("food");
 }
 
-function moveSnake(direction) {
-  var headPos = snakePos[snakePos.length - 1];
-  var nextPos;
+
+function moveSnake(key) {
+  $(document).on("keydown", function(event) {
+    switch (event.which) {
+      case 37:
+        key = 'left';
+        break;
+      case 38:
+        key = 'up';
+        break;
+      case 39:
+        key = 'right';
+        break;
+      case 40:
+        key = 'down';
+        break;
+    }
+
+    var nextPos = getNextPos(key);
+
+    snakePos.push(nextPos);
+    var drop = snakePos.shift();
+
+    updateSnake(drop);
+    // setTimeout(function() {
+    //   moveSnake(key);
+    // }, 500);
+  })
+}
+
+// Get the nextPos for the snake to move to
+function getNextPos(direction) {
+  var headPos = snakePos[snakePos.length - 1],
+      nextPos;
 
   switch (direction) {
+    case 'left':
+      nextPos = headPos - 1;
+      break;
     case 'up':
       nextPos = headPos - COLS;
       break;
@@ -60,16 +108,18 @@ function moveSnake(direction) {
     case 'down':
       nextPos = headPos + COLS;
       break;
-    case 'left':
-      nextPos = headPos - 1;
-      break;
-    default:
-
   }
+
+  return nextPos;
+}
+
+function play() {
+  drawSnakeStart();
+  drawFood();
+  moveSnake(DOWN);
 }
 
 $(document).ready(function() {
   createGrid(ROWS, COLS);
-  drawSnake();
-  drawFood();
+  play();
 });
