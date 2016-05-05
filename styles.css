@@ -1,3 +1,5 @@
+/*IMPORTS*/
+
 @import url(https://fonts.googleapis.com/css?family=Lobster+Two:400,400italic);
 
 /*CSS RESET*/
@@ -27,6 +29,7 @@ time, mark, audio, video {
 
 body {
   font-family: 'Lobster Two', cursive, monospace;
+  background: #FFEECC;
 }
 
 #container {
