@@ -4,8 +4,22 @@ COLS = 40,
 LEFT = 37,
 UP = 38,
 RIGHT = 39,
-DOWN = 40;
+DOWN = 40,
+LEFTCOLS = [],
+RIGHTCOLS = [],
+TOTALBOXES = (ROWS * COLS);
 
+for (var i = 1; i <= ROWS; i++) {
+  var newRightCol = i * COLS;
+  RIGHTCOLS.push(newRightCol);
+}
+
+for (var i = 0; i < ROWS; i++) {
+  var newLeftCol = (COLS * i) + 1;
+  LEFTCOLS.push(newLeftCol);
+}
+
+//Global vars
 var snakePos = [],
     foodPos,
     automate;
@@ -27,7 +41,7 @@ function createGrid(x, y) {
 
 // Create the snake head and place it in the grid's center
 function drawSnakeStart() {
-  var gridCenter = Math.floor(((ROWS * COLS) / 2) - COLS / 2 );
+  var gridCenter = Math.floor((TOTALBOXES / 2) - COLS / 2 );
 
   $("#grid").find("#" + gridCenter).addClass("snakeHead");
   snakePos.push(gridCenter);
@@ -35,15 +49,16 @@ function drawSnakeStart() {
 
 // Generate a random box number and place food in it
 function drawFood() {
-  foodPos = Math.floor(Math.random() * (ROWS * COLS)) + 1;
+  foodPos = Math.floor(Math.random() * TOTALBOXES) + 1;
 
   // If box id = snake id generate new number
   while (snakePos.includes(foodPos)) {
-    foodPos = Math.floor(Math.random() * (ROWS * COLS)) + 1;
+    foodPos = Math.floor(Math.random() * TOTALBOXES) + 1;
   }
   $("#grid").find("#" + foodPos).addClass("food");
 }
 
+// Appropriate keypress to correct direction and call required functions
 function moveSnake(keyNum) {
   var key = keyNum;
 
@@ -75,16 +90,6 @@ function moveSnake(keyNum) {
   automateSnake();
 }
 
-function automateSnake() {
-  automate = setTimeout(function() {
-    moveSnake();
-  }, 200);
-}
-
-function clearAutomation() {
-  clearTimeout(automate);
-}
-
 // Get the nextPos for the snake to move to
 function getNextPos(dir) {
   var headPos = snakePos[snakePos.length - 1],
@@ -108,7 +113,12 @@ function getNextPos(dir) {
   if ( snakePos.length === 1 || nextPos !== snakePos[snakePos.length - 2]) {
     if (nextPos === foodPos) {
       growSnake();
-    } else if (snakePos.includes(nextPos)) {
+    } else if ( snakePos.includes(nextPos) ||
+                nextPos < 1 ||
+                nextPos > TOTALBOXES ||
+                (LEFTCOLS.includes(snakePos[snakePos.length - 1]) && RIGHTCOLS.includes(nextPos)) ||
+                (RIGHTCOLS.includes(snakePos[snakePos.length - 1]) && LEFTCOLS.includes(nextPos))
+              ) {
         gameOver();
     }
 
@@ -135,6 +145,18 @@ function growSnake() {
   $("#grid").find("#" + foodPos).removeClass("food").addClass("snakeHead");
   snakePos.push(foodPos);
   drawFood();
+}
+
+//  Create a timeout to automate the snake
+function automateSnake() {
+  automate = setTimeout(function() {
+    moveSnake();
+  }, 200);
+}
+
+// Clear snake timeout
+function clearAutomation() {
+  clearTimeout(automate);
 }
 
 function gameOver() {
