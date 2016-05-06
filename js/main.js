@@ -22,7 +22,8 @@ for (var i = 0; i < ROWS; i++) {
 //Global vars
 var snakePos = [],
     foodPos,
-    automate;
+    automate,
+    score = 0;
 
 // Create a grid using the given x and y values
 function createGrid(x, y) {
@@ -145,6 +146,8 @@ function growSnake() {
   $("#grid").find("#" + foodPos).removeClass("food").addClass("snakeHead");
   snakePos.push(foodPos);
   drawFood();
+  score++;
+  $("#score").text(score);
 }
 
 //  Create a timeout to automate the snake

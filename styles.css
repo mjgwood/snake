@@ -79,6 +79,7 @@ header p {
 	background: -moz-linear-gradient(#FF0000, #333333 60%);
   background: -o-linear-gradient(#FF0000, #333333 60%);
   background: -webkit-linear-gradient(#FF0000, #333333 60%);
+  border-radius: 20%;
 }
 
 .snakeBody {
@@ -93,4 +94,5 @@ header p {
 	background: -moz-linear-gradient(#66FF88, #FF00EE 50%);
   background: -o-linear-gradient(#66FF88, #FF00EE 50%);
   background: -webkit-linear-gradient(#66FF88, #FF00EE 50%);
+  border-radius: 3px;
 }
