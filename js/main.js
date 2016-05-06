@@ -147,7 +147,7 @@ function growSnake() {
   snakePos.push(foodPos);
   drawFood();
   score++;
-  $("#score").text(score);
+  $("#score").text("Score: " + score);
 }
 
 //  Create a timeout to automate the snake
