@@ -179,6 +179,7 @@ $(document).ready(function() {
 
   $(document).on("keydown", function(event) {
     var keyNum = event.which;
+    event.preventDefault();
     clearAutomation();
     moveSnake(keyNum);
   })
